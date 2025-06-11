@@ -49,12 +49,6 @@ public class TransactionServiceImpl implements TransactionService {
                     return new TSBadRequestException("Receiver account not found", NOT_FOUND_ERR);
                 });
 
-        // throw error if requested currency does not match sender's currency
-        if (!request.getCurrency().equals(sender.getCurrency())) {
-            log.info("Currency mismatch: {} {}", request.getCurrency(), sender.getCurrency());
-            throw new TSBadRequestException("Currency mismatch", MISMATCH_ERR);
-        }
-
         BigDecimal convertedAmount = originalAmount;
         // check if currencies match
         if (!sender.getCurrency().equals(receiver.getCurrency())) {

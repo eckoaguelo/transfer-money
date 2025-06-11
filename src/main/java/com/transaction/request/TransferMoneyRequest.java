@@ -9,5 +9,4 @@ public class TransferMoneyRequest {
     public Long senderAccountId;
     public Long receiverAccountId;
     public BigDecimal amount;
-    public String currency;
 }
