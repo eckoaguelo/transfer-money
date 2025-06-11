@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/transactiondb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+transaction:
+  rates:
+    USD-AUD: 2.00                     # USD to AUD conversion rate
+    AUD-USD: 0.50                     # AUD to USD conversion rate
+  transactionFeePercentage: 0.01      # transaction fee percentage
