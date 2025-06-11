@@ -49,10 +49,9 @@ public class TransactionServiceImplTest {
         request.setSenderAccountId(1L);
         request.setReceiverAccountId(2L);
         request.setAmount(new BigDecimal("10"));
-        request.setCurrency("USD");
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(sender));
-        when(accountRepository.findById(2L)).thenReturn(Optional.of(receiver));
+        when(accountRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(sender));
+        when(accountRepository.findByIdForUpdate(2L)).thenReturn(Optional.of(receiver));
         when(config.getTransactionFeePercentage()).thenReturn(new BigDecimal("0.01"));
 
         transactionService.transfer(request);
@@ -80,10 +79,9 @@ public class TransactionServiceImplTest {
         request.setSenderAccountId(1L);
         request.setReceiverAccountId(2L);
         request.setAmount(new BigDecimal("10"));
-        request.setCurrency("USD");
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(sender));
-        when(accountRepository.findById(2L)).thenReturn(Optional.of(receiver));
+        when(accountRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(sender));
+        when(accountRepository.findByIdForUpdate(2L)).thenReturn(Optional.of(receiver));
         when(fxRateService.getRate("USD", "AUD")).thenReturn(new BigDecimal("2.0"));
         when(config.getTransactionFeePercentage()).thenReturn(new BigDecimal("0.01"));
 
@@ -102,7 +100,6 @@ public class TransactionServiceImplTest {
         request.setSenderAccountId(1L);
         request.setReceiverAccountId(2L);
         request.setAmount(new BigDecimal("-10"));
-        request.setCurrency("USD");
 
         assertThrows(TSBadRequestException.class, () -> transactionService.transfer(request));
     }
@@ -113,9 +110,8 @@ public class TransactionServiceImplTest {
         request.setSenderAccountId(1L);
         request.setReceiverAccountId(2L);
         request.setAmount(new BigDecimal("10"));
-        request.setCurrency("USD");
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.empty());
+        when(accountRepository.findByIdForUpdate(1L)).thenReturn(Optional.empty());
 
         assertThrows(TSBadRequestException.class, () -> transactionService.transfer(request));
     }
@@ -131,37 +127,13 @@ public class TransactionServiceImplTest {
         request.setSenderAccountId(1L);
         request.setReceiverAccountId(2L);
         request.setAmount(new BigDecimal("10"));
-        request.setCurrency("USD");
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(sender));
-        when(accountRepository.findById(2L)).thenReturn(Optional.empty());
-
-        assertThrows(TSBadRequestException.class, () -> transactionService.transfer(request));
-    }
-
-    @Test
-    public void testTransferCurrencyMismatchException() {
-        Account sender = new Account();
-        sender.setId(1L);
-        sender.setCurrency("USD");
-        sender.setBalance(new BigDecimal("100.00"));
-
-        Account receiver = new Account();
-        receiver.setId(2L);
-        receiver.setCurrency("USD");
-        receiver.setBalance(new BigDecimal("100.00"));
-
-        TransferMoneyRequest request = new TransferMoneyRequest();
-        request.setSenderAccountId(1L);
-        request.setReceiverAccountId(2L);
-        request.setAmount(new BigDecimal("10"));
-        request.setCurrency("AUD"); // Mismatch
-
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(sender));
-        when(accountRepository.findById(2L)).thenReturn(Optional.of(receiver));
+        when(accountRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(sender));
+        when(accountRepository.findByIdForUpdate(2L)).thenReturn(Optional.empty());
 
         assertThrows(TSBadRequestException.class, () -> transactionService.transfer(request));
     }
+
 
     @Test
     public void testTransferInsufficientBalanceException() {
@@ -179,10 +151,9 @@ public class TransactionServiceImplTest {
         request.setSenderAccountId(1L);
         request.setReceiverAccountId(2L);
         request.setAmount(new BigDecimal("10"));
-        request.setCurrency("USD");
 
-        when(accountRepository.findById(1L)).thenReturn(Optional.of(sender));
-        when(accountRepository.findById(2L)).thenReturn(Optional.of(receiver));
+        when(accountRepository.findByIdForUpdate(1L)).thenReturn(Optional.of(sender));
+        when(accountRepository.findByIdForUpdate(2L)).thenReturn(Optional.of(receiver));
         when(config.getTransactionFeePercentage()).thenReturn(new BigDecimal("0.01"));
 
         assertThrows(TSBadRequestException.class, () -> transactionService.transfer(request));
